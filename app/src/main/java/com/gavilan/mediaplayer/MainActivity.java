@@ -2,11 +2,13 @@ package com.gavilan.mediaplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     MediaPlayer mediaPlayer;
     boolean conectado;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.button);
         button.setEnabled(false);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setIndeterminate(true);
         conectado = conectar();
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean conectar(){
         Toast.makeText(getApplicationContext(),"Intentado conectar",Toast.LENGTH_LONG).show();
+
+
         String url = "http://stm3.miradio.com.es:12036/"; // your URL here
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     Toast.makeText(getApplicationContext(),"Conectado",Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
                     button.setEnabled(true);
                 }
             });
